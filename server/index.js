@@ -1,19 +1,22 @@
 const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
-const app = express()
+const { ApolloServer } = require('apollo-server-express')
 
-// Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
 config.dev = process.env.NODE_ENV !== 'production'
 
-async function start() {
+const typeDefs = require('./schema')
+const resolvers = require('./resolvers')
+
+const app = express()
+
+const prepare = async () => {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
-
   const { host, port } = nuxt.options.server
-
   await nuxt.ready()
+
   // Build only in dev mode
   if (config.dev) {
     const builder = new Builder(nuxt)
@@ -23,11 +26,17 @@ async function start() {
   // Give nuxt middleware to express
   app.use(nuxt.render)
 
+  // Apollo Server
+  const server = new ApolloServer({ typeDefs, resolvers })
+  server.applyMiddleware({ app })
+
   // Listen the server
-  app.listen(port, host)
-  consola.ready({
-    message: `Server listening on http://${host}:${port}`,
-    badge: true
+  app.listen(port, host, () => {
+    consola.ready({
+      message: `Server listening on http://${host}:${port}`,
+      badge: true
+    })
   })
 }
-start()
+
+prepare()

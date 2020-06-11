@@ -1,26 +1,16 @@
 const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
-const { ApolloServer, gql } = require('apollo-server-express')
-const cors = require('cors')
+const { ApolloServer } = require('apollo-server-express')
 
 const config = require('../nuxt.config.js')
 config.dev = process.env.NODE_ENV !== 'production'
 
 const app = express()
-app.use(cors())
 
 // Apollo Server
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`
-const resolvers = {
-  Query: {
-    hello: () => 'hello world!'
-  }
-}
+const typeDefs = require('./graphql/schema')
+const resolvers = require('./graphql/resolvers')
 
 const server = new ApolloServer({ typeDefs, resolvers })
 server.applyMiddleware({ app })

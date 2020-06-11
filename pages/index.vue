@@ -1,16 +1,21 @@
 <template>
-  <h1>
-    {{ hello }}
-  </h1>
+  <h1>{{ hello }}</h1>
 </template>
-<script lang="ts">
-import Vue from 'vue'
+<script>
+import gql from 'graphql-tag'
 
-export default Vue.extend({
-  asyncData() {
+export default {
+  apollo: {
+    hello: gql`
+      query {
+        hello
+      }
+    `
+  },
+  data() {
     return {
-      hello: 'hello dupa!'
+      hello: ''
     }
   }
-})
+}
 </script>

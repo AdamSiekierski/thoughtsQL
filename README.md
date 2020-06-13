@@ -1,4 +1,4 @@
-# notesQL
+# thoughtsQL
 
 > My wondrous Nuxt.js project
 

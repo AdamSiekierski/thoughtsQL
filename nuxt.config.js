@@ -23,7 +23,7 @@ module.exports = {
   /*
    ** Global CSS
    */
-  css: ['ant-design-vue/dist/antd.css'],
+  css: ['@/assets/styles/index.css'],
   /*
    ** Plugins to load before mounting the App
    */
